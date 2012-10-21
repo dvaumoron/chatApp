@@ -1,0 +1,34 @@
+@(messageForm: Form[Message])
+
+@import helper._
+
+@main("Chat application") {
+
+	<ul id="messageList"></ul>
+
+	@form(routes.Application.ajax()) {
+		@inputText(messageForm("message"))
+		
+		<input type="submit" value="send">
+	}
+
+	<script>
+		var form = $("form");
+		form.submit(function(event) {
+			event.preventDefault();
+			$.ajax({
+				type: "POST",
+				url: form.attr("action"),
+				data: form.serialize()
+			});
+			$("#message").val("");
+		});
+
+		var receiveMessage = function(event) {
+			$("#messageList").append("<li>" + event + "</li>");
+		}
+	</script>
+
+    <iframe class="invisible" src="/comet"></iframe>
+
+}
